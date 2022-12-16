@@ -11,6 +11,7 @@
   "type": "module",
   "dependencies": {
     "heap-js": "^2.2.0",
-    "node-dijkstra": "^2.5.0"
+    "node-dijkstra": "^2.5.0",
+    "priorityqueuejs": "^2.0.0"
   }
 }
