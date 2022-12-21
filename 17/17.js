@@ -3,10 +3,8 @@ import {readFileAsString} from '../readData.js';
 const data = readFileAsString('17/data.txt').split('');
 const example = readFileAsString('17/example.txt').split('');
 
-const leftRightArray = example;
-// const leftRightArray = data;
-
-const leftRightInstructionCount = leftRightArray.length;
+// const leftRightArray = example;
+const leftRightArray = data;
 
 const shapes = [
     {
@@ -180,14 +178,21 @@ let timePassed = 0;
 
 const startTime = Date.now();
 
-const rocksToFall = leftRightInstructionCount * 5 * 1000;
+const rocksToFall = 1000000000000;
+
+const periodfactor = leftRightArray.length * shapes.length;
+// console.log(periodfactor);
+const periodsToWatch = {};
+let periodFound = false;
+
+const heightGains = [];
 
 for (let i = 0; i < rocksToFall; i++) {
-    // if (i % 1000000 === 0) {
-    //     const duration = Date.now() - startTime;
-    //     const estimatedTotalTime = duration * (rocksToFall / i);
-    //     console.log(`Estimated total time:\n${Math.floor(estimatedTotalTime/1000)} seconds\n${Math.floor(estimatedTotalTime/3600000)} hours`)
-    // }
+    if (i % 1000000 === 0) {
+        console.log(`Duration: ${Date.now() - startTime}ms`);
+        console.log(`rocks fallen: ${i}, periods watching = ${Object.keys(periodsToWatch).length}`)
+    }
+    const initialCavernHeight = cavern.length;
     const fallingRock = new FallingRock(shapes[i % shapes.length], cavern)
     let falling = true;
     while (falling) {
@@ -218,9 +223,55 @@ for (let i = 0; i < rocksToFall; i++) {
         }
     }
     fallingRock.convertToCavernRock();
+    const cavernHeightGain = cavern.length - initialCavernHeight;
+    heightGains.push(cavernHeightGain);
+
+    for (let index = cavern.length - 6; index < cavern.length; index++) {
+        const row = cavern[index];
+        if (row === undefined) {
+            continue;
+        }
+        if (row.every(space => space === '#')) {
+            cavern.splice(0,index);
+            break;
+        }
+    }
+
+    if (periodFound) {
+        continue;
+    }
+
+    const periodsToWatchCount = Math.floor(i / periodfactor);
+    if (Object.keys(periodsToWatch).length < periodsToWatchCount) {
+        periodsToWatch[periodsToWatchCount] = {
+            periodSize: periodsToWatchCount * periodfactor,
+            consecutiveMatchCount: 0
+        }
+    }
+    for (const period of Object.values(periodsToWatch)) {
+        if (cavernHeightGain === heightGains[i - period.periodSize]) {
+            period.consecutiveMatchCount += 1;
+            if (period.consecutiveMatchCount >= 200) {
+                console.log(period.periodSize);
+                const periodGains = heightGains.slice(i - period.periodSize, i);
+                const totalPeriodGain = periodGains.reduce((a,b) => a + b);
+                console.log(totalPeriodGain);
+                const remainingPeriodCount = Math.floor((rocksToFall - i) / period.periodSize);
+                heightGains.push(remainingPeriodCount * totalPeriodGain);
+                i += remainingPeriodCount * period.periodSize;
+                periodFound = true;
+            }
+        } else {
+            period.consecutiveMatchCount = 0;
+        }
+    }
     // console.log(`=====================================================\nrock ${i + 1}`)
     // printCavern(cavern);
     // console.log('=====================================================')
 }
 
-console.log(cavern.length);
+const cavernHeight = heightGains.reduce((a,b) => a + b);
+console.log(`Duration: ${Date.now() - startTime}ms`);
+console.log(cavernHeight);
+
+// 1583294720740 too high
