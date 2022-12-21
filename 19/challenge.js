@@ -162,8 +162,8 @@ const developSituation = (situation, blueprint, largestGeodeCountSoFar) => {
     return nextSteps;
 }
 
-const findMaxGeodesForBlueprint = (blueprint) => {
-    let timeRemaining = 24;
+const findMaxGeodesForBlueprint = (blueprint, time) => {
+    let timeRemaining = time;
     const robots = { ore: 1, clay: 0, obsidian: 0, geode: 0 };
     const resources = { ore: 0, clay: 0, obsidian: 0, geode: 0 };
     const situations = [new Situation(timeRemaining, robots, resources)]
@@ -186,16 +186,32 @@ const findMaxGeodesForBlueprint = (blueprint) => {
     return maxGeodes;
 }
 
+// // part 1
+// const startTime = Date.now();
+
+// let answer = 0;
+
+// blueprints.forEach(bp => {
+//     const geodes = findMaxGeodesForBlueprint(bp, 24);
+//     // console.log(`blueprint ${bp.id} - ${geodes} geodes found`)
+//     const qualityLevel = geodes * bp.id;
+//     // console.log(qualityLevel)
+//     answer += qualityLevel;
+// })
+
+// console.log(`duration: ${Date.now() - startTime}ms`);
+// console.log(answer);
+
+// part 2
+
 const startTime = Date.now();
 
-let answer = 0;
+let answer = 1;
 
-blueprints.forEach(bp => {
-    const geodes = findMaxGeodesForBlueprint(bp);
-    // console.log(`blueprint ${bp.id} - ${geodes} geodes found`)
-    const qualityLevel = geodes * bp.id;
-    // console.log(qualityLevel)
-    answer += qualityLevel;
+blueprints.slice(0,3).forEach(bp => {
+    const geodes = findMaxGeodesForBlueprint(bp, 32);
+    console.log(`blueprint ${bp.id} - ${geodes} geodes found`);
+    answer *= geodes;
 })
 
 console.log(`duration: ${Date.now() - startTime}ms`);
