@@ -93,7 +93,7 @@ const findNextCoordinateAfterStep = (position) => {
         case 'N':
             positionToTry = { x: position.x, y: position.y - 1 }
             nextPos = coordinateAt(positionToTry);
-            while (nextPos === undefined) {
+            while (nextPos === ' ' || nextPos === undefined) {
                 if (positionToTry.y < 0) {
                     positionToTry.y = map.length;
                 } else {
