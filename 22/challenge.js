@@ -135,13 +135,12 @@ const position = {
     direction: 'E'
 }
 
-for (let i = 0; i < 60; i++) {
-// for (let i = 0; i < steps.length; i++) {
-    // console.log(`${i}th instruction followed, duration: ${Date.now() - startTime}ms`)
+// for (let i = 0; i < 60; i++) {
+for (let i = 0; i < steps.length; i++) {
     const instruction = steps[i];
-    console.log("==========")
-    console.log(position);
-    console.log(instruction);
+    // console.log("==========")
+    // console.log(position);
+    // console.log(instruction);
     if (Number.isInteger(instruction)) {
         const stepCount = instruction;
         for (let j = 0; j < stepCount; j++) {
