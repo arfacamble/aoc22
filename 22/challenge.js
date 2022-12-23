@@ -159,8 +159,8 @@ for (let i = 0; i < steps.length; i++) {
 }
 
 console.log(position);
-const finalPassword = 1000 * (position.y+1) + 4 * (position.x+1) + directions.indexOf(position.direction);
-console.log(finalPassword);
+const finalPassword = (position) => 1000 * (position.y+1) + 4 * (position.x+1) + directions.indexOf(position.direction);
+console.log(finalPassword(position));
 
 console.log(`Duration: ${Date.now() - startTime}ms`)
 
