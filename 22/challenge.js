@@ -54,11 +54,67 @@ const coordinateAt = (coordinate) => {
     return map[coordinate.y] ? map[coordinate.y][coordinate.x] : map[coordinate.y];
 }
 
+const checkCoordinate = (coordinate) => {
+    let spaceOrWall;
+    if (!map[coordinate.y] || !map[coordinate.y][coordinate.x] || (spaceOrWall = map[coordinate.y][coordinate.x]) === ' ') {
+        return false
+    }
+    return spaceOrWall;
+}
+
 // console.log(coordinateAt(0,0));
 // console.log(coordinateAt(5,0));
 // console.log(coordinateAt(10,0));
 // console.log(coordinateAt(15,0));
 // console.log(coordinateAt(7,-1));
+
+const findNextPositionPartTwo = (position) => {
+    // return something like {
+    //     canMove: false,
+    //     x: -1,
+    //     y: -1,
+    //     direction: 'X'
+    // }
+    let spaceOrWall;
+    switch (position.direction) {
+        case 'N':
+            if (spaceOrWall = checkCoordinate({x: position.x, y: position.y - 1})) {
+                if (spaceOrWall === '.') {
+                    return {
+                        canMove: true,
+                        x: position.x,
+                        y: position.y,
+                        direction: 'N'
+                    }
+                } else {
+                    return {
+                        canMove: false
+                    }
+                }
+            } else if (position.x >= 100) {
+                const newY = 199;
+                const newX = position.x - 100;
+                const direction = 'N';
+                spaceOrWall = checkCoordinate({x: newX, y: newY});
+                if (spaceOrWall === '.') {
+                    return {
+                        canMove: true,
+                        x: newX,
+                        y: newY,
+                        direction: direction
+                    }
+                } else {
+                    return {
+                        canMove: false
+                    }
+                }
+            } else if (position.x >= 50) {
+                // edge 4
+            } else {
+                //edge 5
+            }
+    }
+}
 
 const findNextCoordinateAfterStep = (position) => {
     let positionToTry;
