@@ -69,50 +69,122 @@ const checkCoordinate = (coordinate) => {
 // console.log(coordinateAt(7,-1));
 
 const findNextPositionPartTwo = (position) => {
-    // return something like {
-    //     canMove: false,
-    //     x: -1,
-    //     y: -1,
-    //     direction: 'X'
-    // }
     let spaceOrWall;
+    let newX;
+    let newY;
+    let newDirection;
     switch (position.direction) {
         case 'N':
-            if (spaceOrWall = checkCoordinate({x: position.x, y: position.y - 1})) {
-                if (spaceOrWall === '.') {
-                    return {
-                        canMove: true,
-                        x: position.x,
-                        y: position.y,
-                        direction: 'N'
-                    }
-                } else {
-                    return {
-                        canMove: false
-                    }
-                }
+            if (checkCoordinate({x: position.x, y: position.y - 1})) {
+                newX = position.x;
+                newY = position.y - 1;
+                newDirection = position.direction;
             } else if (position.x >= 100) {
-                const newY = 199;
-                const newX = position.x - 100;
-                const direction = 'N';
-                spaceOrWall = checkCoordinate({x: newX, y: newY});
-                if (spaceOrWall === '.') {
-                    return {
-                        canMove: true,
-                        x: newX,
-                        y: newY,
-                        direction: direction
-                    }
-                } else {
-                    return {
-                        canMove: false
-                    }
-                }
+                console.log('ping')
+                newY = 199;
+                newX = position.x - 100;
+                newDirection = 'N';
             } else if (position.x >= 50) {
-                // edge 4
+                console.log('ping')
+                newX = 0;
+                newY = position.x + 100;
+                newDirection = 'E';
             } else {
-                //edge 5
+                console.log('ping')
+                newX = 50;
+                newY = position.x + 50;
+                newDirection = 'E';
             }
+            break;
+        case 'S':
+            if (checkCoordinate({x: position.x, y: position.y + 1})) {
+                newX = position.x;
+                newY = position.y + 1;
+                newDirection = position.direction;
+            } else if (position.x >= 100) {
+                console.log('ping')
+                newX = 99;
+                newY = position.x - 50;
+                newDirection = 'W';
+            } else if (position.x >= 50) {
+                console.log('ping')
+                newX = 49;
+                newY = position.x + 100;
+                newDirection = 'W';
+            } else {
+                console.log('ping')
+                newX = position.x + 100;
+                newY = 0;
+                newDirection = 'S';
+            }
+            break;
+        case 'W':
+            if (checkCoordinate({x: position.x - 1, y: position.y})) {
+                newX = position.x - 1;
+                newY = position.y;
+                newDirection = position.direction;
+            } else if (position.y >= 150) {
+                console.log('ping')
+                newX = position.y - 100;
+                newY = 0;
+                newDirection = 'S';
+            } else if (position.y >= 100) {
+                console.log('ping')
+                newY = 149 - position.y;
+                newX = 50;
+                newDirection = 'E';
+            } else if (position.y >= 50) {
+                console.log('ping')
+                newX = position.y - 50;
+                newY = 100;
+                newDirection = 'S';
+            } else {
+                console.log('ping')
+                newX = 0;
+                newY = 149 - position.y;
+                newDirection = 'E';
+            }
+            break;
+        case 'E':
+            if (checkCoordinate({x: position.x + 1, y: position.y})) {
+                newX = position.x + 1;
+                newY = position.y;
+                newDirection = position.direction;
+            } else if (position.y >= 150) {
+                console.log('ping')
+                newX = position.y - 100;
+                newY = 149;
+                newDirection = 'N';
+            } else if (position.y >= 100) {
+                console.log('ping')
+                newX = 149;
+                newY = 149 - position.y;
+                newDirection = 'W';
+            } else if (position.y >= 50) {
+                console.log('ping')
+                newX = position.y + 50;
+                newY = 49;
+                newDirection = 'N';
+            } else {
+                console.log('ping')
+                newX = 99;
+                newY = 149 - position.y;
+                newDirection = 'W';
+            }
+            break;
+    }
+    spaceOrWall = checkCoordinate({x: newX, y: newY});
+    if (spaceOrWall === '.') {
+        return {
+            canMove: true,
+            x: newX,
+            y: newY,
+            direction: newDirection
+        }
+    } else {
+        return {
+            canMove: false
+        }
     }
 }
 
@@ -186,24 +258,51 @@ const findNextCoordinateAfterStep = (position) => {
 }
 
 const position = {
-    y: 0,
     x: map[0].indexOf('.'),
+    y: 0,
     direction: 'E'
 }
 
+// // part 1
+// // for (let i = 0; i < 60; i++) {
+// for (let i = 0; i < steps.length; i++) {
+//     const instruction = steps[i];
+//     // console.log("==========")
+//     // console.log(position);
+//     // console.log(instruction);
+//     if (Number.isInteger(instruction)) {
+//         const stepCount = instruction;
+//         for (let j = 0; j < stepCount; j++) {
+//             const nextPos = findNextCoordinateAfterStep(position);
+//             if (nextPos.canMove) {
+//                 position.x = nextPos.x,
+//                 position.y = nextPos.y
+//             } else {
+//                 break;
+//             }
+//         }
+//     } else {
+//         const turnDirection = instruction;
+//         position.direction = changeDirection(position.direction, turnDirection);
+//     }
+// }
+
+// part 2
 // for (let i = 0; i < 60; i++) {
 for (let i = 0; i < steps.length; i++) {
     const instruction = steps[i];
-    // console.log("==========")
-    // console.log(position);
-    // console.log(instruction);
+    console.log("==========");
+    console.log(position);
+    console.log(instruction);
     if (Number.isInteger(instruction)) {
         const stepCount = instruction;
         for (let j = 0; j < stepCount; j++) {
-            const nextPos = findNextCoordinateAfterStep(position);
+            const nextPos = findNextPositionPartTwo(position);
+            // console.log(nextPos);
             if (nextPos.canMove) {
-                position.x = nextPos.x,
-                position.y = nextPos.y
+                position.x = nextPos.x;
+                position.y = nextPos.y;
+                position.direction = nextPos.direction;
             } else {
                 break;
             }
@@ -220,4 +319,8 @@ console.log(finalPassword(position));
 
 console.log(`Duration: ${Date.now() - startTime}ms`)
 
-// 130066 too high
+// 130066 too high part 1
+
+// part 2 82206 too low
+// 144043 too high
+// 139224 too high
