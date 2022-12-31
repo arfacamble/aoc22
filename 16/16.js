@@ -4,8 +4,8 @@ import PriorityQueue from 'priorityqueuejs';
 const data = readDataAsArray('16/data.txt');
 const example = readDataAsArray('16/example.txt');
 
-const input = example;
-// const input = data;
+// const input = example;
+const input = data;
 
 class Valve {
     constructor(id, flowRate, tunnels) {
@@ -269,50 +269,50 @@ const comparator = (a,b) => {
     // return b.timePassed - a.timePassed;
 }
 
-// // part 1
-// var queue = new PriorityQueue(comparator);
-
-// queue.enq(new Path());
-
-// let pathMoving;
-
-// const startTime = Date.now();
-
-// while (queue.size() > 0) {
-//     pathMoving = queue.deq();
-//     pathMoving.takeStep().forEach(newPath => queue.enq(newPath));
-// }
-
-// console.log(`total time: ${Date.now() - startTime}`);
-
-// console.log(maxPressureReleaseFound);
-
-// part 2
+// part 1
 var queue = new PriorityQueue(comparator);
-queue.enq(new PathPartTwo());
+
+queue.enq(new Path());
 
 let pathMoving;
 
 const startTime = Date.now();
 
-let printerval = 2;
-
 while (queue.size() > 0) {
     pathMoving = queue.deq();
-    const nextSteps = pathMoving.takeSteps();
-    nextSteps.forEach(newPath => queue.enq(newPath));
-    const duration = (Date.now() - startTime) / 1000;
-    if (duration > printerval) {
-        printerval += 2;
-        console.log(`\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=`);
-        console.log(`Duration: ${Math.floor(duration)}s   Queue size: ${queue.size()}    Max pressure found: ${maxPressureReleaseFound}`);
-        console.log(`moving ${pathMoving.printString()}`);
-    }
+    pathMoving.takeStep().forEach(newPath => queue.enq(newPath));
 }
 
 console.log(`total time: ${Date.now() - startTime}`);
 
 console.log(maxPressureReleaseFound);
+
+// // part 2
+// var queue = new PriorityQueue(comparator);
+// queue.enq(new PathPartTwo());
+
+// let pathMoving;
+
+// const startTime = Date.now();
+
+// let printerval = 2;
+
+// while (queue.size() > 0) {
+//     pathMoving = queue.deq();
+//     const nextSteps = pathMoving.takeSteps();
+//     nextSteps.forEach(newPath => queue.enq(newPath));
+//     const duration = (Date.now() - startTime) / 1000;
+//     if (duration > printerval) {
+//         printerval += 2;
+//         console.log(`\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=`);
+//         console.log(`Duration: ${Math.floor(duration)}s   Queue size: ${queue.size()}    Max pressure found: ${maxPressureReleaseFound}`);
+//         console.log(`moving ${pathMoving.printString()}`);
+//     }
+// }
+
+// console.log(`total time: ${Date.now() - startTime}`);
+
+// console.log(maxPressureReleaseFound);
 // 1535 is too low
 // 1637 is too low
 // 1703 wrong
