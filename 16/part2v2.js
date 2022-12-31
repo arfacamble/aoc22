@@ -126,8 +126,8 @@ class Route {
     routeComplete = () => {
         if (this.pressureReleased > maxPossiblePressureRelease) {
             maxPossiblePressureRelease = this.pressureReleased;
-            console.log(this.openValves)
-            console.log(`New Max PRESSURE - ${maxPossiblePressureRelease}`);
+            // console.log(this.openValves)
+            // console.log(`New Max PRESSURE - ${maxPossiblePressureRelease}`);
         }
     }
 
@@ -210,6 +210,24 @@ class Route {
         }
         return nextSteps;
     }
+
+    optimisticBestPressure = () => {
+        const unopenedValves = [...this.unopenedValves].sort((a,b) => valves[a].rate - valves[b].rate);
+        let optimisticPressureRelease = this.pressureReleased;
+        let manTimeRemaining = this.manTimeRemaining;
+        let beastTimeRemaining = this.beastTimeRemaining;
+        while (unopenedValves.length > 0 && (manTimeRemaining > 2 || beastTimeRemaining > 2)) {
+            const nextValve = valves[unopenedValves.pop()];
+            if (manTimeRemaining > beastTimeRemaining) {
+                manTimeRemaining -= 2;
+                optimisticPressureRelease += manTimeRemaining * nextValve.rate;
+            } else {
+                beastTimeRemaining -= 2;
+                optimisticPressureRelease += beastTimeRemaining * nextValve.rate;
+            }
+        }
+        return optimisticPressureRelease;
+    }
 }
 
 const paths = new PriorityQueue((a,b) => a.pressureReleased - b.pressureReleased);
@@ -218,6 +236,9 @@ paths.enq(new Route());
 // for (let i = 0; i < 4; i++) {
 while (!paths.isEmpty()) {
     const pathToDevelop = paths.deq();
+    if (pathToDevelop.optimisticBestPressure() < maxPossiblePressureRelease) {
+        continue;
+    }
     const developedPaths = pathToDevelop.getNextSteps();
     developedPaths.forEach(path => paths.enq(path));
     // console.log('====================');
